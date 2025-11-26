@@ -18,3 +18,7 @@ declare module "vitest/browser" {
     render: typeof render;
   }
 }
+
+declare global {
+  var __ZONELESS__: boolean | undefined;
+}
