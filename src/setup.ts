@@ -5,14 +5,20 @@ import {
   platformBrowserTesting,
 } from "@angular/platform-browser/testing";
 
-export function setupAngularTestEnvironment(isZoneless = true): void {
+export type SetupOptions = {
+  isZoneless: boolean;
+};
+
+export function setupAngularTestEnvironment(
+  options: SetupOptions = { isZoneless: true }, // Default to zoneless because from angular v21+ it is the default
+): void {
   @NgModule({
-    providers: isZoneless ? [provideZonelessChangeDetection()] : [],
+    providers: options.isZoneless ? [provideZonelessChangeDetection()] : [],
   })
   class ZonelessTestModule {}
 
   getTestBed().initTestEnvironment(
-    [BrowserTestingModule, ...(isZoneless ? [ZonelessTestModule] : [])],
+    [BrowserTestingModule, ...(options.isZoneless ? [ZonelessTestModule] : [])],
     platformBrowserTesting(),
 
     // We need to set this in order for browser mode to keep showing the component after the test
