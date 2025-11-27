@@ -1,8 +1,7 @@
-import { afterEach, beforeEach, describe, expect, test, vitest } from 'vitest';
 import { render } from '../src';
 import { ZonelessComponent } from './components/zoneless.component';
 
-describe.runIf(globalThis.__ZONELESS__)('Zoneless Tests', () => {
+describe('Zoneless Tests', () => {
   beforeEach(() => {
     vitest.useFakeTimers();
   });
