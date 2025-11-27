@@ -55,8 +55,7 @@
     "lint:fix": "pnpm lint --fix",
     "release": "changeset publish",
     "release.pkg-pr-new": "pnpm dlx pkg-pr-new publish",
-    "test": "vitest",
-    "test.zoneless": "vitest --config vitest.config-zoneless.ts"
+    "test": "vitest"
   },
   "peerDependencies": {
     "@analogjs/vitest-angular": "^1.20.0",
