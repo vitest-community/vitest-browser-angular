@@ -8,12 +8,12 @@ import { provideRouter, Router, Routes } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
 import { type Locator, page } from "vitest/browser";
 
-interface RoutingConfig {
+export interface RoutingConfig {
   routes: Routes;
   initialRoute?: string;
 }
 
-interface RenderConfig {
+export interface RenderConfig {
   withRouting?: RoutingConfig | boolean;
   providers?: Array<Provider | EnvironmentProviders>;
   imports?: unknown[];
