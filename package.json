@@ -54,7 +54,7 @@
     "test": "vitest"
   },
   "peerDependencies": {
-    "@analogjs/vitest-angular": "^1.20.0",
+    "@analogjs/vitest-angular": ">1.20.0",
     "@angular/compiler": "^20.0.0",
     "@angular/core": "^20.0.0",
     "@angular/platform-browser": "^20.0.0",
