@@ -2,4 +2,4 @@
 'vitest-browser-angular': patch
 ---
 
-expose config types
+FEAT: expose config types

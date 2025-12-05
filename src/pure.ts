@@ -1,4 +1,10 @@
-import type { EnvironmentProviders, Provider, Type } from "@angular/core";
+import type {
+  EnvironmentProviders,
+  InputSignal,
+  Provider,
+  Type,
+} from "@angular/core";
+import { inputBinding } from "@angular/core";
 import {
   type ComponentFixture,
   ɵgetCleanupHook as getCleanupHook,
@@ -13,7 +19,16 @@ export interface RoutingConfig {
   initialRoute?: string;
 }
 
-export interface RenderConfig {
+export type Inputs<CMP_TYPE extends Type<unknown>> = Partial<{
+  [PROP in keyof InstanceType<CMP_TYPE> as InstanceType<CMP_TYPE>[PROP] extends InputSignal<unknown>
+    ? PROP
+    : never]: InstanceType<CMP_TYPE>[PROP] extends InputSignal<infer VALUE>
+    ? VALUE
+    : never;
+}>;
+
+export interface RenderConfig<CMP_TYPE extends Type<unknown> = Type<unknown>> {
+  inputs?: Inputs<CMP_TYPE>;
   withRouting?: RoutingConfig | boolean;
   providers?: Array<Provider | EnvironmentProviders>;
   imports?: unknown[];
@@ -27,18 +42,18 @@ export interface RenderResult<T> {
   router?: Router;
 }
 
-export type RenderFn = <T>(
-  component: Type<T>,
-  config?: RenderConfig,
-) => Promise<RenderResult<T>>;
+export type RenderFn = <CMP_TYPE extends Type<unknown>>(
+  component: Type<CMP_TYPE>,
+  config?: RenderConfig<CMP_TYPE>,
+) => Promise<RenderResult<CMP_TYPE>>;
 
-export async function render<T>(
-  componentClass: Type<T>,
-  config?: RenderConfig,
+export async function render<CMP_TYPE extends Type<unknown>>(
+  componentClass: CMP_TYPE,
+  config?: RenderConfig<CMP_TYPE>,
 ) {
   const imports = [componentClass, ...(config?.imports || [])];
   const providers = [...(config?.providers || [])];
-  const renderResult: Partial<RenderResult<T>> = {};
+  const renderResult: Partial<RenderResult<CMP_TYPE>> = {};
 
   if (config?.withRouting) {
     const routes =
@@ -60,7 +75,13 @@ export async function render<T>(
     renderResult.routerHarness = routerHarness;
     renderResult.router = TestBed.inject(Router);
   }
-  const fixture = TestBed.createComponent(componentClass);
+
+  const bindings = Object.entries(config?.inputs ?? {}).map(([key, value]) =>
+    inputBinding(key, () => value),
+  );
+  const fixture = TestBed.createComponent(componentClass, {
+    bindings,
+  });
   fixture.autoDetectChanges();
   await fixture.whenStable();
 
