@@ -8,51 +8,13 @@ Render Angular components in VItest Browser Mode.
 pnpm add -D vitest-browser-angular
 ```
 
-## Setup Test Environment with Zone.js
+## Setup Test Environment
 
-```ts
-// vitest.config.ts
+To set up your test environment (with Zone.js or Zoneless), use `@analogjs/vitest-angular`'s `setupTestBed()` function.
 
-import { playwright } from '@vitest/browser-playwright';
+**Important:** Make sure to use `{ browserMode: true }` when calling `setupTestBed()` to enable Vitest browser mode's visual test preview functionality.
 
-export default defineConfig({
-  test: {
-    globals: true,
-
-    // 👇 This is what you need to add
-    setupFiles: ['vitest-browser-angular/setup-zones'],
-
-    browser: {
-      enabled: true,
-      provider: playwright(),
-      instances: [{ browser: 'chromium' }],
-    },
-  },
-});
-```
-
-## Setup Test Environment with Zoneless
-
-```ts
-// vitest.config.ts
-
-import { playwright } from '@vitest/browser-playwright';
-
-export default defineConfig({
-  test: {
-    globals: true,
-
-    // 👇 This is what you need to add
-    setupFiles: ['vitest-browser-angular/setup-zoneless'],
-
-    browser: {
-      enabled: true,
-      provider: playwright(),
-      instances: [{ browser: 'chromium' }],
-    },
-  },
-});
-```
+For detailed setup instructions for both Zone.js and Zoneless configurations, please refer to the [Analog Vitest documentation](https://analogjs.org/docs/features/testing/vitest).
 
 ## Usage
 

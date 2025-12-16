@@ -8,11 +8,11 @@ importers:
   .:
     devDependencies:
       '@analogjs/vite-plugin-angular':
-        specifier: ^1.20.0
-        version: 1.22.1(@angular/build@20.3.0(@angular/compiler-cli@20.3.0(@angular/compiler@20.3.0)(typescript@5.9.2))(@angular/compiler@20.3.0)(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@20.3.0(@angular/common@20.3.0(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1)))(chokidar@4.0.3)(jiti@2.5.1)(postcss@8.5.6)(tslib@2.8.1)(tsx@4.20.5)(typescript@5.9.2)(vitest@4.0.8)(yaml@2.8.1))
+        specifier: 2.2.0
+        version: 2.2.0(@angular/build@20.3.0(@angular/compiler-cli@20.3.0(@angular/compiler@20.3.0)(typescript@5.9.2))(@angular/compiler@20.3.0)(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@20.3.0(@angular/common@20.3.0(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1)))(chokidar@4.0.3)(jiti@2.5.1)(postcss@8.5.6)(tslib@2.8.1)(tsx@4.20.5)(typescript@5.9.2)(vitest@4.0.8)(yaml@2.8.1))
       '@analogjs/vitest-angular':
-        specifier: ^1.20.0
-        version: 1.22.5(@analogjs/vite-plugin-angular@1.22.1(@angular/build@20.3.0(@angular/compiler-cli@20.3.0(@angular/compiler@20.3.0)(typescript@5.9.2))(@angular/compiler@20.3.0)(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@20.3.0(@angular/common@20.3.0(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1)))(chokidar@4.0.3)(jiti@2.5.1)(postcss@8.5.6)(tslib@2.8.1)(tsx@4.20.5)(typescript@5.9.2)(vitest@4.0.8)(yaml@2.8.1)))(@angular-devkit/architect@0.2100.2(chokidar@4.0.3))(vitest@4.0.8)
+        specifier: 2.2.0
+        version: 2.2.0(@analogjs/vite-plugin-angular@2.2.0(@angular/build@20.3.0(@angular/compiler-cli@20.3.0(@angular/compiler@20.3.0)(typescript@5.9.2))(@angular/compiler@20.3.0)(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@20.3.0(@angular/common@20.3.0(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1)))(chokidar@4.0.3)(jiti@2.5.1)(postcss@8.5.6)(tslib@2.8.1)(tsx@4.20.5)(typescript@5.9.2)(vitest@4.0.8)(yaml@2.8.1)))(@angular-devkit/architect@0.2100.2(chokidar@4.0.3))(vitest@4.0.8)
       '@angular/compiler':
         specifier: ^20.3.0
         version: 20.3.0
@@ -133,28 +133,28 @@ packages:
       }
     engines: { node: '>=6.0.0' }
 
-  '@analogjs/vite-plugin-angular@1.22.1':
+  '@analogjs/vite-plugin-angular@2.2.0':
     resolution:
       {
-        integrity: sha512-EAUctqpG/qRTXYnX7eLgMK2P1qN+FlA5ar2T07377YMQ8+lVdXVwAY5qZq54pvPLlnbXM1wfOaASzljTGNNslg==,
+        integrity: sha512-ujHfBb0V2MqUJN1Lji057TvM3Wxfi0ll6eo77BGpELN0UsjMspc35veQ2qWPCOscTGk5CI4+csXs0svQHDTekA==,
       }
     peerDependencies:
-      '@angular-devkit/build-angular': ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0
-      '@angular/build': ^18.0.0 || ^19.0.0 || ^20.0.0
+      '@angular-devkit/build-angular': ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0
+      '@angular/build': ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0
     peerDependenciesMeta:
       '@angular-devkit/build-angular':
         optional: true
       '@angular/build':
         optional: true
 
-  '@analogjs/vitest-angular@1.22.5':
+  '@analogjs/vitest-angular@2.2.0':
     resolution:
       {
-        integrity: sha512-lYwa9f6LFClW80sPhCydTOQvKnpWPnyChFhYdgMRpUZuKYo9102PndOLZkqR5K8WlKSilbP2293whaG1vZBMyA==,
+        integrity: sha512-IFLsxChJPL7noy9dksATL/L4ofIUbADdtaD0Taj5pSlGLZ7evmvG+Y71HUnJUyVcDWyfcNJpSnS8B16hmxAXgQ==,
       }
     peerDependencies:
       '@analogjs/vite-plugin-angular': '*'
-      '@angular-devkit/architect': '>=0.1500.0 < 0.2100.0'
+      '@angular-devkit/architect': '>=0.1500.0 < 0.2200.0'
       vitest: ^1.3.1 || ^2.0.0 || ^3.0.0 || ^4.0.0
 
   '@angular-devkit/architect@0.2003.0':
@@ -2131,12 +2131,6 @@ packages:
     resolution:
       {
         integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==,
-      }
-
-  '@types/unist@3.0.3':
-    resolution:
-      {
-        integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==,
       }
 
   '@typescript-eslint/eslint-plugin@8.42.0':
@@ -5100,12 +5094,6 @@ packages:
       }
     engines: { node: '>=18' }
 
-  unist-util-stringify-position@4.0.0:
-    resolution:
-      {
-        integrity: sha512-0ASV06AAoKCDkS2+xw5RXJywruurpbC4JZSm7nr7MOt1ojAzvyyaO+UxZf18j8FCF6kmzCZKcAgN/yu2gm2XgQ==,
-      }
-
   universal-user-agent@6.0.1:
     resolution:
       {
@@ -5167,18 +5155,6 @@ packages:
         integrity: sha512-OljLrQ9SQdOUqTaQxqL5dEfZWrXExyyWsozYlAWFawPVNuD83igl7uJD2RTkNMbniIYgt8l81eCJGIdQF7avLQ==,
       }
     engines: { node: ^14.17.0 || ^16.13.0 || >=18.0.0 }
-
-  vfile-message@4.0.3:
-    resolution:
-      {
-        integrity: sha512-QTHzsGd1EhbZs4AsQ20JX1rC3cOlt/IWJruk893DfLRr57lcnOeMaWG4K0JrRta4mIJZKth2Au3mM3u03/JWKw==,
-      }
-
-  vfile@6.0.3:
-    resolution:
-      {
-        integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==,
-      }
 
   vite@7.1.2:
     resolution:
@@ -5498,16 +5474,15 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.30
     optional: true
 
-  '@analogjs/vite-plugin-angular@1.22.1(@angular/build@20.3.0(@angular/compiler-cli@20.3.0(@angular/compiler@20.3.0)(typescript@5.9.2))(@angular/compiler@20.3.0)(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@20.3.0(@angular/common@20.3.0(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1)))(chokidar@4.0.3)(jiti@2.5.1)(postcss@8.5.6)(tslib@2.8.1)(tsx@4.20.5)(typescript@5.9.2)(vitest@4.0.8)(yaml@2.8.1))':
+  '@analogjs/vite-plugin-angular@2.2.0(@angular/build@20.3.0(@angular/compiler-cli@20.3.0(@angular/compiler@20.3.0)(typescript@5.9.2))(@angular/compiler@20.3.0)(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@20.3.0(@angular/common@20.3.0(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1)))(chokidar@4.0.3)(jiti@2.5.1)(postcss@8.5.6)(tslib@2.8.1)(tsx@4.20.5)(typescript@5.9.2)(vitest@4.0.8)(yaml@2.8.1))':
     dependencies:
       ts-morph: 21.0.1
-      vfile: 6.0.3
     optionalDependencies:
       '@angular/build': 20.3.0(@angular/compiler-cli@20.3.0(@angular/compiler@20.3.0)(typescript@5.9.2))(@angular/compiler@20.3.0)(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@20.3.0(@angular/common@20.3.0(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1)))(chokidar@4.0.3)(jiti@2.5.1)(postcss@8.5.6)(tslib@2.8.1)(tsx@4.20.5)(typescript@5.9.2)(vitest@4.0.8)(yaml@2.8.1)
 
-  '@analogjs/vitest-angular@1.22.5(@analogjs/vite-plugin-angular@1.22.1(@angular/build@20.3.0(@angular/compiler-cli@20.3.0(@angular/compiler@20.3.0)(typescript@5.9.2))(@angular/compiler@20.3.0)(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@20.3.0(@angular/common@20.3.0(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1)))(chokidar@4.0.3)(jiti@2.5.1)(postcss@8.5.6)(tslib@2.8.1)(tsx@4.20.5)(typescript@5.9.2)(vitest@4.0.8)(yaml@2.8.1)))(@angular-devkit/architect@0.2100.2(chokidar@4.0.3))(vitest@4.0.8)':
+  '@analogjs/vitest-angular@2.2.0(@analogjs/vite-plugin-angular@2.2.0(@angular/build@20.3.0(@angular/compiler-cli@20.3.0(@angular/compiler@20.3.0)(typescript@5.9.2))(@angular/compiler@20.3.0)(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@20.3.0(@angular/common@20.3.0(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1)))(chokidar@4.0.3)(jiti@2.5.1)(postcss@8.5.6)(tslib@2.8.1)(tsx@4.20.5)(typescript@5.9.2)(vitest@4.0.8)(yaml@2.8.1)))(@angular-devkit/architect@0.2100.2(chokidar@4.0.3))(vitest@4.0.8)':
     dependencies:
-      '@analogjs/vite-plugin-angular': 1.22.1(@angular/build@20.3.0(@angular/compiler-cli@20.3.0(@angular/compiler@20.3.0)(typescript@5.9.2))(@angular/compiler@20.3.0)(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@20.3.0(@angular/common@20.3.0(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1)))(chokidar@4.0.3)(jiti@2.5.1)(postcss@8.5.6)(tslib@2.8.1)(tsx@4.20.5)(typescript@5.9.2)(vitest@4.0.8)(yaml@2.8.1))
+      '@analogjs/vite-plugin-angular': 2.2.0(@angular/build@20.3.0(@angular/compiler-cli@20.3.0(@angular/compiler@20.3.0)(typescript@5.9.2))(@angular/compiler@20.3.0)(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@20.3.0(@angular/common@20.3.0(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.0(@angular/compiler@20.3.0)(rxjs@7.8.2)(zone.js@0.15.1)))(chokidar@4.0.3)(jiti@2.5.1)(postcss@8.5.6)(tslib@2.8.1)(tsx@4.20.5)(typescript@5.9.2)(vitest@4.0.8)(yaml@2.8.1))
       '@angular-devkit/architect': 0.2100.2(chokidar@4.0.3)
       vitest: 4.0.8(@types/debug@4.1.12)(@vitest/browser-playwright@4.0.8)(jiti@2.5.1)(sass@1.90.0)(tsx@4.20.5)(yaml@2.8.1)
 
@@ -6663,8 +6638,6 @@ snapshots:
     optional: true
 
   '@types/node@12.20.55': {}
-
-  '@types/unist@3.0.3': {}
 
   '@typescript-eslint/eslint-plugin@8.42.0(@typescript-eslint/parser@8.42.0(eslint@9.35.0(jiti@2.5.1))(typescript@5.9.2))(eslint@9.35.0(jiti@2.5.1))(typescript@5.9.2)':
     dependencies:
@@ -8521,10 +8494,6 @@ snapshots:
 
   unicorn-magic@0.3.0: {}
 
-  unist-util-stringify-position@4.0.0:
-    dependencies:
-      '@types/unist': 3.0.3
-
   universal-user-agent@6.0.1: {}
 
   universalify@0.1.2: {}
@@ -8550,16 +8519,6 @@ snapshots:
   url-join@5.0.0: {}
 
   validate-npm-package-name@5.0.1: {}
-
-  vfile-message@4.0.3:
-    dependencies:
-      '@types/unist': 3.0.3
-      unist-util-stringify-position: 4.0.0
-
-  vfile@6.0.3:
-    dependencies:
-      '@types/unist': 3.0.3
-      vfile-message: 4.0.3
 
   vite@7.1.2(jiti@2.5.1)(sass@1.90.0)(tsx@4.20.5)(yaml@2.8.1):
     dependencies:

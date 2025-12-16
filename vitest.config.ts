@@ -9,7 +9,7 @@ export default defineConfig({
         extends: true,
         test: {
           name: { label: 'zone', color: 'red' },
-          setupFiles: ['./src/setup-zones.ts'],
+          setupFiles: ['./test/vitest-zones-setup.ts'],
           exclude: [...defaultExclude, '**/zoneless.test.ts'],
         },
       },
@@ -17,7 +17,7 @@ export default defineConfig({
         extends: true,
         test: {
           name: { label: 'zoneless', color: 'magenta' },
-          setupFiles: ['./src/setup-zoneless.ts'],
+          setupFiles: ['./test/vitest-zoneless-setup.ts'],
           include: ['**/zoneless.test.ts'],
         },
       },
