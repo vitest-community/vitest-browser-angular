@@ -1,10 +1,13 @@
-import { getTestBed } from "@angular/core/testing";
+import { getTestBed, TestBed } from "@angular/core/testing";
 import {
   BrowserTestingModule,
   platformBrowserTesting,
 } from "@angular/platform-browser/testing";
 
 export function setupAngularTestEnvironment(): void {
+  if (TestBed.platform) {
+    return;
+  }
   getTestBed().initTestEnvironment(
     BrowserTestingModule,
     platformBrowserTesting(),

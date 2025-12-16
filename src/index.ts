@@ -1,7 +1,7 @@
 import { beforeEach } from "vitest";
 import { page } from "vitest/browser";
 import { cleanup, render } from "./pure";
-export type { RenderFn, RenderResult } from "./pure";
+export type { Inputs, RenderConfig, RenderFn, RenderResult } from "./pure";
 export { cleanup, render };
 
 page.extend({

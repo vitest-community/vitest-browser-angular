@@ -10,6 +10,17 @@ on:
       - '.gitignore'
       - 'LICENSE'
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout all commits
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup and Test
+        uses: ./.github/actions/setup-and-test
+
   release:
     runs-on: ubuntu-latest
 
@@ -27,48 +38,10 @@ jobs:
           git config --global user.name '@hirezio'
           git config --global user.email 'hirezio@users.noreply.github.com'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Setup and Test
+        uses: ./.github/actions/setup-and-test
         with:
-          version: 9.15.0
-
-      - name: Use Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.x
           registry-url: https://registry.npmjs.org
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        shell: bash
-        run: pnpm install --frozen-lockfile
-
-      - name: Lint
-        shell: bash
-        run: pnpm lint
-
-      - name: Get Playwright version
-        id: playwright-version
-        shell: bash
-        run: echo "PLAYWRIGHT_VERSION=$(jq -r '.devDependencies.playwright' package.json)" >> $GITHUB_ENV
-
-      - name: Cache Playwright browsers
-        id: playwright-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ env.PLAYWRIGHT_VERSION }}
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-      - name: Test
-        shell: bash
-        run: pnpm test
-
-      - name: Build
-        shell: bash
-        run: pnpm build
 
       - name: Publish any commit / build for testing
         shell: bash

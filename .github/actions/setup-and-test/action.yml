@@ -1,0 +1,56 @@
+name: 'Setup and Test'
+description: 'Common setup and test steps for CI'
+
+inputs:
+  registry-url:
+    description: 'Registry URL for npm publishing'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9.15.0
+
+    - name: Use Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22.x
+        registry-url: ${{ inputs.registry-url || '' }}
+        cache: 'pnpm'
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile
+
+    - name: Lint
+      shell: bash
+      run: pnpm lint
+
+    - name: Get Playwright version
+      id: playwright-version
+      shell: bash
+      run: echo "PLAYWRIGHT_VERSION=$(jq -r '.devDependencies.playwright' package.json)" >> $GITHUB_ENV
+
+    - name: Cache Playwright browsers
+      id: playwright-cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-${{ runner.os }}-${{ env.PLAYWRIGHT_VERSION }}
+
+    - name: Install Playwright browsers
+      shell: bash
+      run: npx playwright install --with-deps
+      if: steps.playwright-cache.outputs.cache-hit != 'true'
+
+    - name: Test
+      shell: bash
+      run: pnpm test
+
+    - name: Build
+      shell: bash
+      run: pnpm build
