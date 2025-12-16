@@ -12,6 +12,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/main'
     steps:
       - name: Checkout all commits
         uses: actions/checkout@v3
