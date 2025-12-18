@@ -27,6 +27,10 @@
     "./setup-zones": {
       "types": "./dist/setup-zones.d.mts",
       "default": "./dist/setup-zones.mjs"
+    },
+    "./setup-zoneless": {
+      "types": "./dist/setup-zoneless.d.mts",
+      "default": "./dist/setup-zoneless.mjs"
     }
   },
   "main": "./dist/index.mjs",

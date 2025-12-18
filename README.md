@@ -33,7 +33,26 @@ export default defineConfig({
 
 ## Setup Test Environment with Zoneless
 
-TBD
+```ts
+// vitest.config.ts
+
+import { playwright } from '@vitest/browser-playwright';
+
+export default defineConfig({
+  test: {
+    globals: true,
+
+    // 👇 This is what you need to add
+    setupFiles: ['vitest-browser-angular/setup-zoneless'],
+
+    browser: {
+      enabled: true,
+      provider: playwright(),
+      instances: [{ browser: 'chromium' }],
+    },
+  },
+});
+```
 
 ## Usage
 

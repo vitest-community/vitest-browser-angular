@@ -1,4 +1,3 @@
-import { expect, test } from 'vitest';
 import { render } from '../src';
 import { HelloWorldComponent } from './components/hello-world.component';
 import { ProductComponent } from './components/product.component';

@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { expect, test } from 'vitest';
 import { render } from '../src';
 import { AboutComponent } from './components/about.component';
 import { ContactComponent } from './components/contact.component';

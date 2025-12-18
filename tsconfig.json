@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "lib": ["esnext", "dom", "DOM.Iterable"],
+    "types": ["vitest/globals"],
     "target": "es2022",
     "emitDecoratorMetadata": false,
     "module": "preserve",
