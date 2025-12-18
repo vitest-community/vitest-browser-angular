@@ -73,6 +73,37 @@ test('render', async () => {
 });
 ```
 
+## Inputs
+
+Pass input values to components using the `inputs` option:
+
+```ts
+import { Component, input } from '@angular/core';
+
+@Component({
+  template: '<h2>{{ name() }}</h2><p>Price: ${{ price() }}</p>',
+  standalone: true,
+})
+export class ProductComponent {
+  name = input('Unknown Product');
+  price = input(0);
+}
+
+test('render with inputs', async () => {
+  const { component } = await render(ProductComponent, {
+    inputs: {
+      name: 'Laptop',
+      price: 1299.99,
+    },
+  });
+
+  await expect.element(component).toHaveTextContent('Laptop');
+  await expect.element(component).toHaveTextContent('$1299.99');
+});
+```
+
+Works with both signal-based inputs (`input()`) and `@Input()` decorators.
+
 ## Routing
 
 ### Simple Routing

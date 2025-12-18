@@ -1,16 +1,24 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
     "lib": ["esnext", "dom", "DOM.Iterable"],
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
     "types": ["vitest/globals"],
+    "target": "es2022",
+    "emitDecoratorMetadata": false,
+    "module": "preserve",
+    "moduleResolution": "bundler",
     "strict": true,
-    "declaration": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "skipLibCheck": true
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "isolatedModules": true
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "typeCheckHostBindings": true,
+    "strictTemplates": true
   },
   "include": ["src", "test"]
 }

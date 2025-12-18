@@ -1,6 +1,8 @@
+import angular from '@analogjs/vite-plugin-angular';
 import { playwright } from '@vitest/browser-playwright';
-import { defineConfig, defaultExclude } from 'vitest/config';
+import { defaultExclude, defineConfig } from 'vitest/config';
 export default defineConfig({
+  plugins: [angular({ tsconfig: './tsconfig.json' })],
   test: {
     projects: [
       {
@@ -21,6 +23,7 @@ export default defineConfig({
       },
     ],
     globals: true,
+    watch: false,
     browser: {
       enabled: true,
       provider: playwright(),

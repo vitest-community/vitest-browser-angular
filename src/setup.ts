@@ -1,5 +1,5 @@
 import { NgModule, provideZonelessChangeDetection } from "@angular/core";
-import { getTestBed } from "@angular/core/testing";
+import { getTestBed, TestBed } from "@angular/core/testing";
 import {
   BrowserTestingModule,
   platformBrowserTesting,
@@ -17,6 +17,9 @@ export function setupAngularTestEnvironment(
   })
   class ZonelessTestModule {}
 
+  if (TestBed.platform) {
+    return;
+  }
   getTestBed().initTestEnvironment(
     [BrowserTestingModule, ...(options.isZoneless ? [ZonelessTestModule] : [])],
     platformBrowserTesting(),
