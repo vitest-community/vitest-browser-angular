@@ -1,5 +1,16 @@
-import { NgModule, provideZonelessChangeDetection } from "@angular/core";
-import { getTestBed, TestBed } from "@angular/core/testing";
+/**
+ * @deprecated This file is deprecated and will be removed in a future version.
+ *
+ * Please use @analogjs/vitest-angular's setupTestBed() instead with the browserMode: true option.
+ *
+ * See Analog's documentation for setup instructions:
+ * https://analogjs.org/docs/features/testing/vitest
+ *
+ * Important: Make sure to use { browserMode: true } when calling setupTestBed() to enable
+ * Vitest browser mode's visual test preview functionality.
+ */
+
+import { getTestBed } from "@angular/core/testing";
 import {
   BrowserTestingModule,
   platformBrowserTesting,
@@ -9,19 +20,9 @@ export type SetupOptions = {
   isZoneless: boolean;
 };
 
-export function setupAngularTestEnvironment(
-  options: SetupOptions = { isZoneless: true }, // Default to zoneless because from angular v21+ it is the default
-): void {
-  @NgModule({
-    providers: options.isZoneless ? [provideZonelessChangeDetection()] : [],
-  })
-  class ZonelessTestModule {}
-
-  if (TestBed.platform) {
-    return;
-  }
+export function setupAngularTestEnvironment(): void {
   getTestBed().initTestEnvironment(
-    [BrowserTestingModule, ...(options.isZoneless ? [ZonelessTestModule] : [])],
+    BrowserTestingModule,
     platformBrowserTesting(),
 
     // We need to set this in order for browser mode to keep showing the component after the test

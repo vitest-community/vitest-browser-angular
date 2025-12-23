@@ -42,18 +42,18 @@ export interface RenderResult<T> {
   router?: Router;
 }
 
-export type RenderFn = <CMP_TYPE extends Type<unknown>>(
-  component: Type<CMP_TYPE>,
-  config?: RenderConfig<CMP_TYPE>,
-) => Promise<RenderResult<CMP_TYPE>>;
+export type RenderFn = <T>(
+  component: Type<T>,
+  config?: RenderConfig<Type<T>>,
+) => Promise<RenderResult<T>>;
 
-export async function render<CMP_TYPE extends Type<unknown>>(
-  componentClass: CMP_TYPE,
-  config?: RenderConfig<CMP_TYPE>,
-) {
+export async function render<T>(
+  componentClass: Type<T>,
+  config?: RenderConfig<Type<T>>,
+): Promise<RenderResult<T>> {
   const imports = [componentClass, ...(config?.imports || [])];
   const providers = [...(config?.providers || [])];
-  const renderResult: Partial<RenderResult<CMP_TYPE>> = {};
+  const renderResult: Partial<RenderResult<T>> = {};
 
   if (config?.withRouting) {
     const routes =
@@ -95,6 +95,6 @@ export async function render<CMP_TYPE extends Type<unknown>>(
   };
 }
 
-export function cleanup(shouldTearndown: boolean = false) {
-  return getCleanupHook(shouldTearndown)();
+export function cleanup(shouldTeardown = false) {
+  return getCleanupHook(shouldTeardown)();
 }
