@@ -1,5 +1,47 @@
 # vitest-browser-angular
 
+## 0.1.0
+
+### Minor Changes
+
+- ✨ deprecate `setup-zones` in favor of analog's setupTestBed (by [@shairez](https://github.com/shairez) in [#12](https://github.com/vitest-community/vitest-browser-angular/pull/12))
+
+  **Motivation**
+
+  Analog has implemented their own `setupTestBed()` function that provides a more comprehensive and maintained solution for setting up Angular tests with Vitest.
+
+  Rather than maintaining duplicate setup logic and keeping documentation in sync, we're directing users to Analog's official documentation.
+
+  **Migration Guide**
+
+  Users should migrate from:
+
+  ```ts
+  // vitest.config.ts
+
+  setupFiles: ['vitest-browser-angular/setup-zones'];
+  ```
+
+  To using Analog's `setupTestBed()`:
+
+  ```ts
+  setupTestBed({ browserMode: true });
+  ```
+
+  See https://analogjs.org/docs/features/testing/vitest for full instructions
+
+### Patch Changes
+
+- ✨ expose config types (by [@shairez](https://github.com/shairez) in [#8](https://github.com/vitest-community/vitest-browser-angular/pull/8))
+
+- 🛠 added test,lint and build checks in CI for PRs (by [@shairez](https://github.com/shairez) in [#8](https://github.com/vitest-community/vitest-browser-angular/pull/8))
+
+- 🐞🩹 component type in render function (by [@shairez](https://github.com/shairez) in [#12](https://github.com/vitest-community/vitest-browser-angular/pull/12))
+
+- 🛠 Implemented tests for zoneless setup (by [@MRinaldi9](https://github.com/MRinaldi9) in [#6](https://github.com/vitest-community/vitest-browser-angular/pull/6))
+
+- ✨ when rendering you can now pass input values to a component (by [@shairez](https://github.com/shairez) in [#8](https://github.com/vitest-community/vitest-browser-angular/pull/8))
+
 ## 0.0.4
 
 ### Patch Changes
