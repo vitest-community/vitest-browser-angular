@@ -28,6 +28,12 @@ jobs:
       - name: Setup and Test
         uses: ./.github/actions/setup-and-test
 
+      - name: Publish any commit / build for testing
+        shell: bash
+        run: pnpm release.pkg-pr-new
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   release:
     runs-on: ubuntu-latest
 
