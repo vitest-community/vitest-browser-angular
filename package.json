@@ -4,13 +4,13 @@
   "description": "Render Angular components in VItest Browser Mode",
   "author": "Shai Reznik (HiRez.io)",
   "license": "MIT",
-  "homepage": "https://github.com/hirezio/vitest-browser-angular#readme",
+  "homepage": "https://github.com/vitest-community/vitest-browser-angular#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hirezio/vitest-browser-angular.git"
+    "url": "git+https://github.com/vitest-community/vitest-browser-angular.git"
   },
   "bugs": {
-    "url": "https://github.com/hirezio/vitest-browser-angular/issues"
+    "url": "https://github.com/vitest-community/vitest-browser-angular/issues"
   },
   "keywords": [
     "angular",
