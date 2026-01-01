@@ -19,7 +19,7 @@ For detailed setup instructions for both Zone.js and Zoneless configurations, pl
 ## Usage
 
 ```ts
-import { test, expect } from 'vitest-browser-angular';
+import { test, expect } from 'vitest';
 import { render } from 'vitest-browser-angular';
 
 @Component({
