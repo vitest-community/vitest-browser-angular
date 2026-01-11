@@ -31,6 +31,7 @@ export interface RenderConfig<CMP_TYPE extends Type<unknown> = Type<unknown>> {
   inputs?: Inputs<CMP_TYPE>;
   withRouting?: RoutingConfig | boolean;
   providers?: Array<Provider | EnvironmentProviders>;
+  componentProviders?: Array<Provider>;
   imports?: unknown[];
 }
 
@@ -65,6 +66,14 @@ export async function render<T>(
     imports,
     providers,
   });
+
+  if (config?.componentProviders) {
+    TestBed.overrideComponent(componentClass, {
+      add: {
+        providers: config.componentProviders,
+      },
+    });
+  }
 
   if (config?.withRouting) {
     const routerHarness = await RouterTestingHarness.create(
