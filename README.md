@@ -158,6 +158,28 @@ test('render with route configuration', async () => {
 });
 ```
 
+## Component Providers
+
+If you need to add or override [component providers](https://angular.dev/guide/di/defining-dependency-providers#component-or-directive-providers), you can use the `componentProviders` option.
+
+```ts
+@Component({
+  template: '<h1>{{ title }}</h1>',
+  providers: [GreetingService],
+})
+export class HelloWorldComponent {
+  title = 'Hello World';
+}
+
+test('renders component with service provider', async () => {
+  const { component } = await render(ServiceConsumerComponent, {
+    componentProviders: [
+      { provide: GreetingService, useClass: FakeGreetingService },
+    ],
+  });
+});
+```
+
 ## Contributing
 
 Want to contribute? Yayy! 🎉
