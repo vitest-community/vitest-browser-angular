@@ -1,5 +1,31 @@
 # vitest-browser-angular
 
+## 0.2.0
+
+### Minor Changes
+
+- ✨ component providers (by [@shairez](https://github.com/shairez) in [#16](https://github.com/vitest-community/vitest-browser-angular/pull/16))
+
+  If you need to override providers defined on the component decorator, you can use the `componentProviders` option:
+
+  ```ts
+  @Component({
+    template: '<h1>{{ title }}</h1>',
+    providers: [GreetingService],
+  })
+  export class HelloWorldComponent {
+    title = 'Hello World';
+  }
+
+  test('renders component with service provider', async () => {
+    const { component } = await render(HelloWorldComponent, {
+      componentProviders: [
+        { provide: GreetingService, useClass: FakeGreetingService },
+      ],
+    });
+  });
+  ```
+
 ## 0.1.0
 
 ### Minor Changes
