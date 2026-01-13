@@ -160,7 +160,7 @@ test('render with route configuration', async () => {
 
 ## Component Providers
 
-If you need to override providers defined on the component decorator, you can use the `componentProviders` option:
+If you need to add or override [component providers](https://angular.dev/guide/di/defining-dependency-providers#component-or-directive-providers), you can use the `componentProviders` option.
 
 ```ts
 @Component({
