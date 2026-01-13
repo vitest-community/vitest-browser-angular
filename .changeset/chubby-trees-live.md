@@ -16,7 +16,7 @@ export class HelloWorldComponent {
 }
 
 test('renders component with service provider', async () => {
-  const { component } = await render(ServiceConsumerComponent, {
+  const { component } = await render(HelloWorldComponent, {
     componentProviders: [
       { provide: GreetingService, useClass: FakeGreetingService },
     ],
