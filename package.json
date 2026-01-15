@@ -1,6 +1,6 @@
 {
   "name": "vitest-browser-angular",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Render Angular components in VItest Browser Mode",
   "author": "Shai Reznik (HiRez.io)",
   "license": "MIT",

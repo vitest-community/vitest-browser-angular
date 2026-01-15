@@ -1,5 +1,46 @@
 # vitest-browser-angular
 
+## 0.3.0
+
+### Minor Changes
+
+- ✨ renamed `RenderConfig` type to `ComponentRenderOptions` (by [@shairez](https://github.com/shairez) in [#18](https://github.com/vitest-community/vitest-browser-angular/pull/18))
+
+  `RenderConfig` is now deprecated and will be removed in a future version. Use `ComponentRenderOptions` instead.`
+
+- ✨ return `container` element (by [@shairez](https://github.com/shairez) in [#18](https://github.com/vitest-community/vitest-browser-angular/pull/18))
+
+  Now you can access the component's host element via the `container` property.
+  This is basically a shortcut for `fixture.nativeElement`.
+
+  ```ts
+  test('renders component with service provider', async () => {
+    const { container, fixture } = await render(HelloWorldComponent);
+
+    expect(container).toBe(fixture.nativeElement);
+  });
+  ```
+
+- ✨ decorated render result with element locators (which start with the baseElement) (by [@shairez](https://github.com/shairez) in [#18](https://github.com/vitest-community/vitest-browser-angular/pull/18))
+
+  Now you can do this:
+
+  ```ts
+  test('renders component with service provider', async () => {
+    const screen = await render(HelloWorldComponent);
+    await expect.element(screen.getByText('Hello World')).toBeVisible(); // uses the baseElement as the root element for the query selector
+  });
+  ```
+
+- ✨ add `baseElement` (by [@shairez](https://github.com/shairez) in [#18](https://github.com/vitest-community/vitest-browser-angular/pull/18))
+
+  Now default locators will be based on the `baseElement` instead of the component element.
+  This helps with testing components which project to a portal.
+
+- ✨ renamed `component` to `locator` to match other vitest-browser libraries api (by [@shairez](https://github.com/shairez) in [#18](https://github.com/vitest-community/vitest-browser-angular/pull/18))
+
+  `component` is now deprecated and will be removed in a future version. Use `locator` instead.
+
 ## 0.2.0
 
 ### Minor Changes
