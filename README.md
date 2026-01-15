@@ -18,21 +18,67 @@ For detailed setup instructions for both Zone.js and Zoneless configurations, pl
 
 ## Usage
 
+### Basic Example
+
+The `render` function supports two query patterns:
+
 ```ts
 import { test, expect } from 'vitest';
 import { render } from 'vitest-browser-angular';
 
 @Component({
-  template: '<h1>{{ title }}</h1>',
+  template: ` <h1>Welcome</h1> `,
 })
-export class HelloWorldComponent {
-  title = 'Hello World';
-}
+export class MyComponent {}
 
-test('render', async () => {
-  const { component } = await render(HelloWorldComponent);
-  await expect.element(component).toHaveTextContent('Hello World');
+test('query elements', async () => {
+  // Pattern 1: Use locator to query within the component element
+  const { locator } = await render(MyComponent);
+  await expect.element(locator.getByText('Welcome')).toBeVisible();
+
+  // Pattern 2: Use screen to query from document.body (useful for portals/overlays)
+  const screen = await render(MyComponent);
+  await expect.element(screen.getByText('Welcome')).toBeVisible();
+  await expect.element(screen.getByText('Some Popover Content')).toBeVisible();
 });
+```
+
+### Query Methods
+
+Both `locator` and `screen` provide the following query methods:
+
+- `getByRole` - Locate by ARIA role and accessible name
+- `getByText` - Locate by text content
+- `getByLabelText` - Locate by associated label text
+- `getByPlaceholder` - Locate by placeholder text
+- `getByAltText` - Locate by alt text (images)
+- `getByTitle` - Locate by title attribute
+- `getByTestId` - Locate by data-testid attribute
+
+**When to use which pattern:**
+
+- **`locator`**: (full name: "Component Locator") - queries are scoped to the component's host element. Best for most component tests.
+- **`screen`**: Queries start from `baseElement` (defaults to `document.body`). Use when testing components that render content outside their host element (modals, tooltips, portals).
+
+### Container Element
+
+Access the component's host element directly via `container` (shortcut for `fixture.nativeElement`):
+
+```ts
+const { container, locator } = await render(MyComponent);
+expect(container).toBe(locator.element());
+```
+
+### Base Element
+
+Customize the root element for screen queries (useful for portal/overlay testing):
+
+```ts
+const customContainer = document.querySelector('#modal-root');
+const screen = await render(ModalComponent, {
+  baseElement: customContainer,
+});
+// screen queries now start from customContainer instead of document.body
 ```
 
 ## Inputs
@@ -52,15 +98,15 @@ export class ProductComponent {
 }
 
 test('render with inputs', async () => {
-  const { component } = await render(ProductComponent, {
+  const screen = await render(ProductComponent, {
     inputs: {
       name: 'Laptop',
       price: 1299.99,
     },
   });
 
-  await expect.element(component).toHaveTextContent('Laptop');
-  await expect.element(component).toHaveTextContent('$1299.99');
+  await expect.element(screen.getByText('Laptop')).toBeVisible();
+  await expect.element(screen.getByText(/Price: \$1299\.99/)).toBeVisible();
 });
 ```
 
@@ -91,12 +137,12 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 export class RoutedComponent {}
 
 test('render with simple routing', async () => {
-  const { component } = await render(RoutedComponent, {
+  const screen = await render(RoutedComponent, {
     withRouting: true,
   });
 
-  await expect.element(component).toHaveTextContent('Home');
-  await expect.element(component).toHaveTextContent('About');
+  await expect.element(screen.getByText('Home')).toBeVisible();
+  await expect.element(screen.getByText('About')).toBeVisible();
 });
 ```
 
@@ -143,18 +189,18 @@ const routes: Routes = [
 ];
 
 test('render with route configuration', async () => {
-  const { component, router } = await render(AppComponent, {
+  const { locator, router } = await render(AppComponent, {
     withRouting: {
       routes,
       initialRoute: '/home',
     },
   });
 
-  await expect.element(component).toHaveTextContent('Home Page');
+  await expect.element(locator).toHaveTextContent('Home Page');
 
   // Navigate programmatically
   await router.navigate(['/about']);
-  await expect.element(component).toHaveTextContent('About Page');
+  await expect.element(locator).toHaveTextContent('About Page');
 });
 ```
 
@@ -172,11 +218,13 @@ export class HelloWorldComponent {
 }
 
 test('renders component with service provider', async () => {
-  const { component } = await render(ServiceConsumerComponent, {
+  const screen = await render(ServiceConsumerComponent, {
     componentProviders: [
       { provide: GreetingService, useClass: FakeGreetingService },
     ],
   });
+
+  await expect.element(screen.getByText('Fake Greeting')).toBeVisible();
 });
 ```
 
