@@ -72,12 +72,6 @@ ng g @analogjs/platform:setup-vitest
 
 *Since Angular v21, Vitest is the default runner so you don't need to set the `runner` option.*
 
-Note: You can override the browsers from the command line using the `--browsers` option.
-
-```sh
-ng test --browsers=ChromiumHeadless
-```
-
 2. Install the browser provider of your choice using `ng add`
 
 ```sh
