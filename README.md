@@ -1,20 +1,126 @@
 # vitest-browser-angular
 
-Render Angular components in VItest Browser Mode.
+This community package renders Angular components in [Vitest Browser Mode](https://vitest.dev/guide/browser).
 
-## Installation
+```ts
+import { Component, input } from '@angular/core'
+import { expect, test } from 'vitest'
+import { render } from 'vitest-browser-angular'
 
-```sh
-pnpm add -D vitest-browser-angular
+@Component({
+  selector: 'app-hello-world',
+  template: '<h1>Hello, {{ name() }}!</h1>',
+})
+export class HelloWorld {
+  name = input.required<string>()
+}
+
+test('renders name', async () => {
+  const { locator } = await render(HelloWorld, {
+    inputs: {
+      name: 'World',
+    },
+  })
+
+  await expect.element(locator).toHaveTextContent('Hello, World!')
+})
 ```
 
-## Setup Test Environment
+## Setup
 
-To set up your test environment (with Zone.js or Zoneless), use `@analogjs/vitest-angular`'s `setupTestBed()` function.
+There are currently two ways to set up Vitest for Angular:
+- Angular CLI's [`unit-test` builder](https://angular.dev/guide/testing#configuration) *(official)*.
+- Analog's [`vitest-angular` plugin](https://analogjs.org/docs/features/testing/vitest) *(community)*.
 
-**Important:** Make sure to use `{ browserMode: true }` when calling `setupTestBed()` to enable Vitest browser mode's visual test preview functionality.
+
+While Angular CLI's `unit-test` builder is the official way to set up Vitest for Angular, it has some [limitations](https://analogjs.org/docs/features/testing/overview#angular-support-for-vitest). Analog's `vitest-angular` plugin provides more Vitest features and greater flexibility.
+
+### Setup with Analog Plugin
+
+1. Set up Vitest
+
+```sh
+npm add -D @analogjs/platform @nx/devkit vitest-browser-angular
+
+ng g @analogjs/platform:setup-vitest
+```
+
+2. Activate browser mode in the generated Vitest configuration by following the [browser mode configuration instructions](https://vitest.dev/guide/browser/#configuration).
+
+### Setup with Angular CLI
+
+1. Configure your Angular project to use the `@angular/build:unit-test` builder, and add the browsers of your choice.
+
+```json
+{
+  ...,
+  "projects": {
+    "my-app": {
+      ...,
+      "architect": {
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "browsers": ["Chromium", "Firefox", "Webkit"]
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+*Since Angular v21, Vitest is the default runner so you don't need to set the `runner` option.*
+
+2. Install the browser provider of your choice using `ng add`
+
+```sh
+# With Playwright
+ng add @vitest/browser-playwright
+
+# or with WebdriverIO
+ng add @vitest/browser-webdriverio
+```
+
+3. Add the `vitest-browser-angular` package to your project.
+
+```sh
+npm add -D vitest-browser-angular
+```
+
+
+## Zone.js and Zoneless Setup
+
+Angular CLI will automatically set up the test environment for you depending on the presence of `zone.js` in your project's polyfills.
+
+When using the Analog plugin, you can control the behavior using the `zoneless` option of `setupTestBed()` in `test-setup.ts`:
+
+```ts
+import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed';
+
+setupTestBed({
+  zoneless: true,
+});
+```
 
 For detailed setup instructions for both Zone.js and Zoneless configurations, please refer to the [Analog Vitest documentation](https://analogjs.org/docs/features/testing/vitest).
+
+
+## Component Preview
+
+To preview, debug and interact with a component in the browser after the test, you can prevent Angular from destroying it.
+
+In Angular CLI, enable this using the `--debug` option.
+
+With the Analog plugin, enable this using the `browserMode` option of `setupTestBed()` in `test-setup.ts`:
+
+```ts
+import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed';
+
+setupTestBed({
+  browserMode: true,
+});
+```
 
 ## Usage
 
