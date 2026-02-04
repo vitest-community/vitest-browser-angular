@@ -116,9 +116,9 @@ For detailed setup instructions for both Zone.js and Zoneless configurations, pl
 
 To preview, debug and interact with a component in the browser after the test, you can prevent Angular from destroying it.
 
-In Angular CLI, this is done using the `--debug` option.
+In Angular CLI, enable this using the `--debug` option.
 
-With the Analog plugin, this is done using the `browserMode` option of `setupTestBed()` in `test-setup.ts`:
+With the Analog plugin, enable this using the `browserMode` option of `setupTestBed()` in `test-setup.ts`:
 
 ```ts
 import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed';
