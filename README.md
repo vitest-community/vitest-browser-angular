@@ -40,7 +40,7 @@ While Angular CLI's `unit-test` builder is the official way to set up Vitest for
 1. Set up Vitest
 
 ```sh
-npm add -D @analogjs/platform @nx/devkit vitest-browser-angular
+npm add -D @analogjs/platform vitest-browser-angular
 
 ng g @analogjs/platform:setup-vitest
 ```
