@@ -29,8 +29,8 @@ test('renders name', async () => {
 ## Setup
 
 There are currently two ways to set up Vitest for Angular:
-- Angular CLI's [`unit-test` builder](https://angular.dev/guide/testing#configuration) *(official)*.
 - Analog's [`vitest-angular` plugin](https://analogjs.org/docs/features/testing/vitest) *(community)*.
+- Angular CLI's [`unit-test` builder](https://angular.dev/guide/testing#configuration) *(official)*.
 
 
 While Angular CLI's `unit-test` builder is the official way to set up Vitest for Angular, it has some [limitations](https://analogjs.org/docs/features/testing/overview#angular-support-for-vitest). Analog's `vitest-angular` plugin provides more Vitest features and greater flexibility.
