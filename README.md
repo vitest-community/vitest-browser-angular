@@ -89,7 +89,7 @@ npm add -D vitest-browser-angular
 ```
 
 
-## Zone.js and Zoneless Setup
+## Zone.js VS Zoneless Setup
 
 Angular CLI will automatically set up the test environment for you depending on the presence of `zone.js` in your project's polyfills.
 
