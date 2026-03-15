@@ -3,16 +3,16 @@
 This community package renders Angular components in [Vitest Browser Mode](https://vitest.dev/guide/browser).
 
 ```ts
-import { Component, input } from '@angular/core'
-import { expect, test } from 'vitest'
-import { render } from 'vitest-browser-angular'
+import { Component, input } from '@angular/core';
+import { expect, test } from 'vitest';
+import { render } from 'vitest-browser-angular';
 
 @Component({
   selector: 'app-hello-world',
   template: '<h1>Hello, {{ name() }}!</h1>',
 })
 export class HelloWorld {
-  name = input.required<string>()
+  name = input.required<string>();
 }
 
 test('renders name', async () => {
@@ -20,18 +20,18 @@ test('renders name', async () => {
     inputs: {
       name: 'World',
     },
-  })
+  });
 
-  await expect.element(locator).toHaveTextContent('Hello, World!')
-})
+  await expect.element(locator).toHaveTextContent('Hello, World!');
+});
 ```
 
 ## Setup
 
 There are currently two ways to set up Vitest for Angular:
-- Analog's [`vitest-angular` plugin](https://analogjs.org/docs/features/testing/vitest) *(community)*.
-- Angular CLI's [`unit-test` builder](https://angular.dev/guide/testing#configuration) *(official)*.
 
+- Analog's [`vitest-angular` plugin](https://analogjs.org/docs/features/testing/vitest) _(community)_.
+- Angular CLI's [`unit-test` builder](https://angular.dev/guide/testing#configuration) _(official)_.
 
 While Angular CLI's `unit-test` builder is the official way to set up Vitest for Angular, it has some [limitations](https://analogjs.org/docs/features/testing/overview#angular-support-for-vitest). Analog's `vitest-angular` plugin provides more Vitest features and greater flexibility.
 
@@ -70,7 +70,7 @@ ng g @analogjs/platform:setup-vitest
 }
 ```
 
-*Since Angular v21, Vitest is the default runner so you don't need to set the `runner` option.*
+_Since Angular v21, Vitest is the default runner so you don't need to set the `runner` option._
 
 2. Install the browser provider of your choice using `ng add`
 
@@ -88,7 +88,6 @@ ng add @vitest/browser-webdriverio
 npm add -D vitest-browser-angular
 ```
 
-
 ## Zone.js VS Zoneless Setup
 
 Angular CLI will automatically set up the test environment for you depending on the presence of `zone.js` in your project's polyfills.
@@ -104,7 +103,6 @@ setupTestBed({
 ```
 
 For detailed setup instructions for both Zone.js and Zoneless configurations, please refer to the [Analog Vitest documentation](https://analogjs.org/docs/features/testing/vitest).
-
 
 ## Component Preview
 
@@ -295,7 +293,7 @@ const routes: Routes = [
 ];
 
 test('render with route configuration', async () => {
-  const { locator, router } = await render(AppComponent, {
+  const { locator, routerHarness, router } = await render(AppComponent, {
     withRouting: {
       routes,
       initialRoute: '/home',
@@ -304,9 +302,119 @@ test('render with route configuration', async () => {
 
   await expect.element(locator).toHaveTextContent('Home Page');
 
-  // Navigate programmatically
-  await router.navigate(['/about']);
+  // Navigate programmatically (prefer routerHarness over router)
+  await routerHarness.navigateByUrl('/about');
   await expect.element(locator).toHaveTextContent('About Page');
+
+  // Use router to inspect state
+  expect(router.url).toBe('/about');
+});
+```
+
+### Route Params
+
+When rendering a routed component, `componentClassInstance` provides access to the actual component instance with full routing context:
+
+```ts
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute, Routes } from '@angular/router';
+
+@Component({
+  template: '<h1>User: {{ userId }}</h1>',
+})
+export class UserComponent {
+  private route = inject(ActivatedRoute);
+  userId = this.route.snapshot.params['id'];
+}
+
+test('access route params', async () => {
+  const routes: Routes = [{ path: 'user/:id', component: UserComponent }];
+
+  const { componentClassInstance } = await render(UserComponent, {
+    withRouting: {
+      routes,
+      initialRoute: '/user/42',
+    },
+  });
+
+  expect(componentClassInstance.userId).toBe('42');
+});
+```
+
+### Passing Inputs via Route Data
+
+By default, `withComponentInputBinding()` is enabled, which automatically binds route `data`, route params, and query params to matching component inputs. This works with both signal inputs (`input()`) and `@Input()` decorators:
+
+```ts
+import { Component, input } from '@angular/core';
+import { Routes } from '@angular/router';
+
+@Component({
+  template: `
+    <h2>{{ name() }}</h2>
+    <p>Age: {{ age() }}</p>
+    <p>Role: {{ role() }}</p>
+  `,
+})
+export class ProfileComponent {
+  name = input('Guest');
+  age = input(0);
+  role = input('user');
+}
+
+test('pass inputs via route data', async () => {
+  const routes: Routes = [
+    {
+      path: 'profile',
+      component: ProfileComponent,
+      data: {
+        name: 'Jane Doe',
+        age: 30,
+        role: 'admin',
+      },
+    },
+  ];
+
+  const { locator, componentClassInstance } = await render(ProfileComponent, {
+    withRouting: {
+      routes,
+      initialRoute: '/profile',
+    },
+  });
+
+  // Inputs are automatically bound from route data
+  expect(componentClassInstance.name()).toBe('Jane Doe');
+  expect(componentClassInstance.age()).toBe(30);
+  expect(componentClassInstance.role()).toBe('admin');
+
+  await expect.element(locator.getByText('Jane Doe')).toBeVisible();
+});
+```
+
+### Disabling Input Binding
+
+If you need to manually handle route data via `ActivatedRoute` instead of automatic input binding, use `disableInputBinding`:
+
+```ts
+test('disable automatic input binding', async () => {
+  const routes: Routes = [
+    {
+      path: 'profile',
+      component: ProfileComponent,
+      data: { name: 'Jane Doe' },
+    },
+  ];
+
+  const { componentClassInstance } = await render(ProfileComponent, {
+    withRouting: {
+      routes,
+      initialRoute: '/profile',
+      disableInputBinding: true, // Inputs will NOT be bound from route data
+    },
+  });
+
+  // Inputs retain their default values
+  expect(componentClassInstance.name()).toBe('Guest');
 });
 ```
 

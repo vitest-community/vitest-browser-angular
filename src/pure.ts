@@ -10,7 +10,12 @@ import {
   ɵgetCleanupHook as getCleanupHook,
   TestBed,
 } from "@angular/core/testing";
-import { provideRouter, Router, Routes } from "@angular/router";
+import {
+  provideRouter,
+  Router,
+  Routes,
+  withComponentInputBinding,
+} from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
 import {
   type Locator,
@@ -21,9 +26,58 @@ import {
 } from "vitest/browser";
 
 const { debug, getElementLocatorSelectors } = utils;
+
+/**
+ * Configuration options for rendering components with Angular Router support.
+ *
+ * @example
+ * ```typescript
+ * // Basic routing with route params
+ * await render(UserComponent, {
+ *   withRouting: {
+ *     routes: [{ path: 'user/:id', component: UserComponent }],
+ *     initialRoute: '/user/42',
+ *   },
+ * });
+ *
+ * // Passing inputs via route data (uses withComponentInputBinding)
+ * await render(ProfileComponent, {
+ *   withRouting: {
+ *     routes: [{
+ *       path: 'profile',
+ *       component: ProfileComponent,
+ *       data: { name: 'John', age: 30 },
+ *     }],
+ *     initialRoute: '/profile',
+ *   },
+ * });
+ * ```
+ */
 export interface RoutingConfig {
+  /**
+   * The route configuration to use. These routes are passed to `provideRouter()`.
+   */
   routes: Routes;
+
+  /**
+   * The initial route to navigate to after setting up the router.
+   * This triggers navigation and activates the matching route's component.
+   *
+   * @example '/user/42' or '/profile?tab=settings'
+   */
   initialRoute?: string;
+
+  /**
+   * When `true`, disables Angular's `withComponentInputBinding()` feature.
+   *
+   * By default, `withComponentInputBinding()` is enabled, which automatically
+   * binds route params, query params, and route data to matching component inputs.
+   *
+   * Set this to `true` if you want to manually handle route data via `ActivatedRoute`.
+   *
+   * @default false
+   */
+  disableInputBinding?: boolean;
 }
 
 export type Inputs<CMP_TYPE extends Type<unknown>> = Partial<{
@@ -34,14 +88,57 @@ export type Inputs<CMP_TYPE extends Type<unknown>> = Partial<{
     : never;
 }>;
 
+/**
+ * Options for rendering a component with `render()`.
+ */
 export interface ComponentRenderOptions<
   CMP_TYPE extends Type<unknown> = Type<unknown>,
 > {
+  /** The base element to render into. Defaults to `document.body`. */
   baseElement?: HTMLElement;
+
+  /**
+   * Input values to pass to the component.
+   *
+   * Note: When using `withRouting`, inputs cannot be passed directly.
+   * Use route `data` instead.
+   */
   inputs?: Inputs<CMP_TYPE>;
+
+  /**
+   * Enable Angular Router support for the component.
+   *
+   * - When `true`: Creates a wildcard route for the component and navigates to `/`.
+   * - When `RoutingConfig`: Uses the provided routes and initial route.
+   *
+   * By default, `withComponentInputBinding()` is enabled, allowing you to pass
+   * inputs via route `data`, route params, or query params.
+   *
+   * @example
+   * ```typescript
+   * // Simple routing (component matches any route)
+   * await render(MyComponent, { withRouting: true });
+   *
+   * // Full routing configuration
+   * await render(UserComponent, {
+   *   withRouting: {
+   *     routes: [
+   *       { path: 'user/:id', component: UserComponent, data: { role: 'admin' } }
+   *     ],
+   *     initialRoute: '/user/42',
+   *   },
+   * });
+   * ```
+   */
   withRouting?: RoutingConfig | boolean;
+
+  /** Additional providers to configure in the testing module. */
   providers?: Array<Provider | EnvironmentProviders>;
+
+  /** Providers to add specifically to the component being rendered. */
   componentProviders?: Array<Provider>;
+
+  /** Additional imports for the testing module. */
   imports?: unknown[];
 }
 /**
@@ -53,7 +150,14 @@ export type RenderConfig<CMP_TYPE extends Type<unknown> = Type<unknown>> =
 export interface RenderResult<T> extends LocatorSelectors {
   baseElement: HTMLElement;
   container: HTMLElement;
-  fixture: ComponentFixture<T>;
+  /**
+   * The ComponentFixture for the rendered component.
+   * When using `withRouting`, this is the RouterTestingHarness's internal fixture
+   * not a fixture of `T` directly.
+   */
+  fixture:
+    | ComponentFixture<T>
+    | InstanceType<typeof RouterTestingHarness>["fixture"];
   debug(
     el?: HTMLElement | HTMLElement[] | Locator | Locator[],
     maxLength?: number,
@@ -64,9 +168,43 @@ export interface RenderResult<T> extends LocatorSelectors {
    * @deprecated Use locator instead
    */
   component: Locator;
+
+  /** Vitest browser locator scoped to the rendered component's container. */
   locator: Locator;
+
+  /** The instance of the rendered component's class. */
   componentClassInstance: T;
+
+  /**
+   * The RouterTestingHarness instance. Only available when `withRouting` is used.
+   *
+   * **Preferred for navigation in tests.** Use `navigateByUrl()` which:
+   * - Waits for all redirects to complete
+   * - Automatically runs change detection
+   * - Returns the activated component instance
+   * - Handles guard rejections gracefully
+   *
+   * @example
+   * ```typescript
+   * // Navigate and get the activated component
+   * const userComponent = await routerHarness.navigateByUrl('/user/42', UserComponent);
+   *
+   * // Simple navigation
+   * await routerHarness.navigateByUrl('/about');
+   * ```
+   */
   routerHarness?: RouterTestingHarness;
+
+  /**
+   * The Angular Router instance. Only available when `withRouting` is used.
+   *
+   * Useful for inspecting router state. For navigation, prefer `routerHarness.navigateByUrl()`.
+   *
+   * @example
+   * ```typescript
+   * expect(router.url).toBe('/user/42');
+   * ```
+   */
   router?: Router;
 }
 
@@ -75,22 +213,66 @@ export type RenderFn = <T>(
   options?: ComponentRenderOptions<Type<T>>,
 ) => Promise<RenderResult<T>>;
 
+/**
+ * Renders an Angular component for testing with Vitest Browser Mode.
+ *
+ * @param componentClass - The component class to render
+ * @param options - Configuration options for rendering
+ * @returns A promise that resolves to the render result with locators and component access
+ *
+ * @example
+ * ```typescript
+ * // Basic render
+ * const { locator } = await render(MyComponent);
+ * await expect.element(locator.getByText('Hello')).toBeVisible();
+ *
+ * // With inputs
+ * const { componentClassInstance } = await render(UserComponent, {
+ *   inputs: { name: 'John', age: 30 },
+ * });
+ *
+ * // With routing and route data as inputs
+ * const { router } = await render(ProfileComponent, {
+ *   withRouting: {
+ *     routes: [{ path: 'profile', component: ProfileComponent, data: { userId: '42' } }],
+ *     initialRoute: '/profile',
+ *   },
+ * });
+ * ```
+ */
 export async function render<T>(
   componentClass: Type<T>,
   options?: ComponentRenderOptions<Type<T>>,
 ): Promise<RenderResult<T>> {
   const imports = [componentClass, ...(options?.imports || [])];
   const providers = [...(options?.providers || [])];
-  const renderResult: Partial<RenderResult<T>> = {};
-
   const baseElement = options?.baseElement || document.body;
 
-  if (options?.withRouting) {
-    const routes =
-      typeof options.withRouting === "boolean"
-        ? []
-        : options.withRouting.routes;
-    providers.push(provideRouter(routes));
+  if (options?.withRouting && options?.inputs) {
+    console.warn(
+      "[vitest-browser-angular] Using `inputs` with `withRouting` is not supported. " +
+        "Inputs cannot be passed directly to routed components. " +
+        "Consider passing data via route params, query params, or route data instead.",
+    );
+  }
+
+  const routingConfig: RoutingConfig | undefined = options?.withRouting
+    ? typeof options.withRouting === "boolean"
+      ? {
+          routes: [{ path: "**", component: componentClass }],
+          initialRoute: "/",
+        }
+      : options.withRouting
+    : undefined;
+
+  if (routingConfig) {
+    if (routingConfig.disableInputBinding) {
+      providers.push(provideRouter(routingConfig.routes));
+    } else {
+      providers.push(
+        provideRouter(routingConfig.routes, withComponentInputBinding()),
+      );
+    }
   }
 
   TestBed.configureTestingModule({
@@ -106,39 +288,47 @@ export async function render<T>(
     });
   }
 
-  if (options?.withRouting) {
-    const routerHarness = await RouterTestingHarness.create(
-      typeof options.withRouting === "boolean"
-        ? undefined
-        : options.withRouting.initialRoute,
+  let fixture: RenderResult<T>["fixture"];
+  let container: HTMLElement;
+  let componentClassInstance: T;
+  let routerHarness: RouterTestingHarness | undefined;
+  let router: Router | undefined;
+
+  if (routingConfig) {
+    routerHarness = await RouterTestingHarness.create(
+      routingConfig.initialRoute,
     );
-    renderResult.routerHarness = routerHarness;
-    renderResult.router = TestBed.inject(Router);
+    router = TestBed.inject(Router);
+
+    fixture = routerHarness.fixture;
+    container = routerHarness.routeNativeElement!;
+    componentClassInstance = routerHarness.routeDebugElement
+      ?.componentInstance as T;
+  } else {
+    const bindings = Object.entries(options?.inputs ?? {}).map(([key, value]) =>
+      inputBinding(key, () => value),
+    );
+
+    fixture = TestBed.createComponent(componentClass, { bindings });
+    container = fixture.nativeElement;
+    componentClassInstance = fixture.componentInstance;
   }
 
-  const bindings = Object.entries(options?.inputs ?? {}).map(([key, value]) =>
-    inputBinding(key, () => value),
-  );
-  const fixture = TestBed.createComponent(componentClass, {
-    bindings,
-  });
   fixture.autoDetectChanges();
   await fixture.whenStable();
-
-  const container = fixture.nativeElement;
 
   const locator = page.elementLocator(container);
 
   return {
-    ...renderResult,
     baseElement,
     container,
     fixture,
-    debug: (el = baseElement, maxLength, options) =>
-      debug(el, maxLength, options),
-    componentClassInstance: fixture.componentInstance,
-    component: locator, // will be removed in future versions
+    debug: (el = baseElement, maxLength, opts) => debug(el, maxLength, opts),
+    componentClassInstance,
+    component: locator, // deprecated, this will be removed in a future version
     locator,
+    routerHarness,
+    router,
     ...getElementLocatorSelectors(baseElement),
   };
 }
