@@ -1,5 +1,25 @@
 # vitest-browser-angular
 
+## 0.4.0
+
+### Minor Changes
+
+- ✨ Add support for Angular 21 (by [@gabrielmethot](https://github.com/gabrielmethot) in [#23](https://github.com/vitest-community/vitest-browser-angular/pull/23))
+
+- ✨ add input binding to withRouting with option to disable (by [@shairez](https://github.com/shairez) in [#25](https://github.com/vitest-community/vitest-browser-angular/pull/25))
+
+  By default, routing tests use Angular's `withComponentInputBinding()`, which binds route params, query params, and route `data` to matching component inputs.
+
+  You can now pass `disableInputBinding: true` in your routing config to turn this off. When disabled, the router is provided without `withComponentInputBinding()`, so components won't auto-receive route data as inputs.
+
+### Patch Changes
+
+- 🐞🩹 routed component is now the activated route (by [@shairez](https://github.com/shairez) in [#25](https://github.com/vitest-community/vitest-browser-angular/pull/25))
+
+  When using `withRouting`, the render result now correctly exposes the **activated route's component** as `componentClassInstance` (and uses the harness fixture for the same component).
+
+  Previously, `componentClassInstance` and `fixture` could refer to a different component than the one actually rendered for the current route. Now they match the component instance that Angular Router activated for the initial (or current) route, so assertions on `componentClassInstance` (e.g. route params like `userId`) and direct fixture access behave as expected in tests.
+
 ## 0.3.0
 
 ### Minor Changes
