@@ -1,5 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterOutlet,
+} from '@angular/router';
 
 @Component({
   selector: 'app-routed',
@@ -50,4 +55,14 @@ export class RoutedComponent {
   navigateToContact() {
     this.router.navigate(['/contact']);
   }
+}
+
+@Component({
+  selector: 'app-user-with-route-param',
+  template: `<h1>User: {{ userId }}</h1>`,
+  standalone: true,
+})
+export class UserWithRouteParamComponent {
+  private route = inject(ActivatedRoute);
+  userId = this.route.snapshot.params['id'];
 }
