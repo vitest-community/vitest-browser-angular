@@ -4,12 +4,17 @@ import type {
   Provider,
   Type,
 } from "@angular/core";
-import { inputBinding } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inputBinding,
+} from "@angular/core";
 import {
   type ComponentFixture,
   ɵgetCleanupHook as getCleanupHook,
   TestBed,
 } from "@angular/core/testing";
+import { By } from "@angular/platform-browser";
 import {
   provideRouter,
   Router,
@@ -329,6 +334,118 @@ export async function render<T>(
     locator,
     routerHarness,
     router,
+    ...getElementLocatorSelectors(baseElement),
+  };
+}
+
+export interface DirectiveRenderOptions {
+  /** Template to render the directive in. Must include the directive selector. */
+  template: string;
+
+  /** Host component input values to pass and make reactive. */
+  hostProps?: Record<string, unknown>;
+
+  /** Additional imports for the test module. */
+  imports?: Type<unknown>[];
+
+  /** Additional providers for the test module. */
+  providers?: Provider[];
+
+  /** The base element for screen queries. Defaults to document.body. */
+  baseElement?: HTMLElement;
+}
+
+export interface DirectiveRenderResult<T> extends LocatorSelectors {
+  container: HTMLElement;
+  baseElement: HTMLElement;
+  /**
+   * The host component's fixture.
+   */
+  fixture: ComponentFixture<unknown>;
+  /**
+   * Instance of the tested directive.
+   */
+  directiveInstance: T;
+  /**
+   * Locator scoped to the host element where the directive is applied.
+   */
+  locator: Locator;
+  /**
+   * Debug function for the directive's element.
+   */
+  debug(
+    el?: HTMLElement | HTMLElement[] | Locator | Locator[],
+    maxLength?: number,
+    options?: PrettyDOMOptions,
+  ): void;
+}
+
+/**
+ * Renders a directive for testing with Vitest Browser Mode.
+ *
+ * @param directiveClass - The directive class to test
+ * @param options - Configuration including the template where the directive is applied
+ * @returns A render result with fixture, directive instance, and query methods
+ *
+ * @example
+ * ```typescript
+ * // Basic directive test
+ * const { directiveInstance, locator } = await renderDirective(HighlightDirective, {
+ *   template: `<div appHighlight>Test</div>`,
+ * });
+ *
+ * // With host input binding
+ * const { locator } = await renderDirective(HighlightDirective, {
+ *   template: `<div [appHighlight]="color" (blurred)="onClick($event)">Test</div>`,
+ *   hostProps: { color: 'red', onClick: vi.fn() },
+ *   imports: [JsonPipe], // extra imports for template
+ * });
+ * ```
+ */
+export async function renderDirective<T>(
+  directiveClass: Type<T>,
+  options: DirectiveRenderOptions,
+): Promise<DirectiveRenderResult<T>> {
+  const baseElement = options.baseElement || document.body;
+  const imports = [directiveClass, ...(options.imports || [])];
+  const providers = [...(options.providers || [])];
+  const hostProps = options.hostProps || {};
+  @Component({
+    selector: "test-host",
+    imports,
+    template: options.template,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+  })
+  class TestHostComponent {
+    constructor() {
+      if (options.hostProps) {
+        Object.assign(this, hostProps);
+      }
+    }
+  }
+
+  const { fixture, container, locator, debug } = await render(
+    TestHostComponent,
+    {
+      providers,
+      baseElement,
+    },
+  );
+  const directiveDE = fixture.debugElement.query(By.directive(directiveClass));
+  if (!directiveDE) {
+    throw new Error(
+      `[renderDirective] Could not find directive ${directiveClass.name} in template. ` +
+        `Make sure the template includes the directive selector and it is imported.`,
+    );
+  }
+  return {
+    container,
+    baseElement,
+    fixture,
+    locator,
+    directiveInstance: directiveDE.injector.get(directiveClass) as T,
+    debug: (el = container, maxLength?: number, opts?: PrettyDOMOptions) =>
+      debug(el, maxLength, opts),
     ...getElementLocatorSelectors(baseElement),
   };
 }
