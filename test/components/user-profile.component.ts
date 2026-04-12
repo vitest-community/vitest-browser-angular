@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-user-profile',
@@ -9,6 +9,7 @@ import { Component, computed, input } from '@angular/core';
       <p class="email">Email: {{ email() }}</p>
       <p class="is-active">Status: {{ isActive() ? 'Active' : 'Inactive' }}</p>
       <p class="full-info">{{ fullInfo() }}</p>
+      <button (click)="send.emit()">Send</button>
     </div>
   `,
 })
@@ -17,6 +18,8 @@ export class UserProfileComponent {
   age = input(0);
   email = input('');
   isActive = input(false);
+
+  send = output<void>();
 
   fullInfo = computed(() => {
     return `${this.name()} (${this.age()} years old) - ${this.email()}`;
