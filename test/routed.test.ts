@@ -13,10 +13,10 @@ test('should render routed component with routing', async () => {
   });
 
   // Check that the component loads
-  await expect.element(locator).toHaveTextContent('Routed Component');
-  await expect.element(locator).toHaveTextContent('Home');
-  await expect.element(locator).toHaveTextContent('About');
-  await expect.element(locator).toHaveTextContent('Contact');
+  await expect.element(locator).toMatchTextContent('Routed Component');
+  await expect.element(locator).toMatchTextContent('Home');
+  await expect.element(locator).toMatchTextContent('About');
+  await expect.element(locator).toMatchTextContent('Contact');
 });
 
 test('should render routed component with full routing configuration and navigate', async () => {
@@ -43,22 +43,22 @@ test('should render routed component with full routing configuration and navigat
   );
 
   // Check that the component loads
-  await expect.element(locator).toHaveTextContent('Routed Component');
-  await expect.element(locator).toHaveTextContent('Home Page');
+  await expect.element(locator).toMatchTextContent('Routed Component');
+  await expect.element(locator).toMatchTextContent('Home Page');
 
   // Navigate to about using router.navigate
   await router!.navigate(['/about']);
-  await expect.element(locator).toHaveTextContent('About Page');
+  await expect.element(locator).toMatchTextContent('About Page');
   expect(router?.url).toEqual('/about');
 
   // Navigate to contact using router.navigate
   await locator.getByRole('link', { name: 'Contact' }).click();
-  await expect.element(locator).toHaveTextContent('Contact Page');
+  await expect.element(locator).toMatchTextContent('Contact Page');
   expect(router?.url).toEqual('/contact');
 
   // Navigate back to home
   await router!.navigate(['/home']);
-  await expect.element(locator).toHaveTextContent('Home Page');
+  await expect.element(locator).toMatchTextContent('Home Page');
   expect(router?.url).toEqual('/home');
 
   // Verify navigation count increased
