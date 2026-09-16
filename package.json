@@ -44,6 +44,7 @@
   "engines": {
     "node": "^18.0.0 || ^20.0.0 || >=22.0.0"
   },
+  "packageManager": "pnpm@11.27.0",
   "scripts": {
     "build": "tsdown",
     "change": "changeset",
@@ -100,11 +101,5 @@
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm fmt.staged && pnpm lint"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "simple-git-hooks"
-    ]
   }
 }

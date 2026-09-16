@@ -12,8 +12,7 @@ runs:
   steps:
     - name: Setup pnpm
       uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
-      with:
-        version: 9.15.0
+      # version is read from package.json#packageManager
 
     - name: Use Node
       uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
