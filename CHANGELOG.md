@@ -1,5 +1,13 @@
 # vitest-browser-angular
 
+## 0.5.1
+
+### Patch Changes
+
+- 🛠 migrate repo tooling to pnpm 11 (`allowBuilds` in `pnpm-workspace.yaml`, pin `packageManager`) (by [@MRinaldi9](https://github.com/MRinaldi9) in [#33](https://github.com/vitest-community/vitest-browser-angular/pull/33))
+
+- Widen `vitest` and `@vitest/browser` peer dependency ranges to support Vitest 5. (by [@ocavuebot](https://github.com/ocavuebot) in [#36](https://github.com/vitest-community/vitest-browser-angular/pull/36))
+
 ## 0.5.0
 
 ### Minor Changes
