@@ -12,23 +12,16 @@ const componentProviders = [
 ];
 
 describe('component with a lazy @defer dependency (AOT)', () => {
-  test('renders with componentProviders', async () => {
-    const { locator } = await render(DeferredComponent, {
-      componentProviders,
-    });
-
-    await expect
-      .element(locator.getByTestId('greeting'))
-      .toHaveTextContent('Hello from componentProviders');
-    await expect
-      .element(locator.getByTestId('deferred'))
-      .toHaveTextContent('Deferred content');
-  });
-
-  test('renders with componentProviders and routing', async () => {
-    const { locator } = await render(DeferredComponent, {
-      componentProviders,
+  test.each([
+    { name: 'renders with componentProviders', withRouting: false },
+    {
+      name: 'renders with componentProviders and routing',
       withRouting: true,
+    },
+  ])('$name', async ({ withRouting }) => {
+    const { locator } = await render(DeferredComponent, {
+      componentProviders,
+      withRouting,
     });
 
     await expect
