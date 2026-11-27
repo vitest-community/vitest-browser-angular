@@ -308,6 +308,11 @@ export async function render<T>(
     });
   }
 
+  // Resolves async component metadata (e.g. an AOT-compiled component whose
+  // `@defer` block has lazy dependencies) before anything is created.
+  // A no-op when nothing is pending.
+  await TestBed.compileComponents();
+
   let fixture: RenderResult<T>["fixture"];
   let container: HTMLElement;
   let componentClassInstance: T;
